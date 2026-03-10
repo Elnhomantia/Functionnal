@@ -1,6 +1,8 @@
 #ifndef OPTION_H
 #define OPTION_H
 
+namespace Elth::functionnal {
+
 template <typename T>
 class Option
 {
@@ -24,5 +26,7 @@ protected:
         Storage(const T& s) : some(s) {}
     } const storage;
 };
+
+}
 
 #endif

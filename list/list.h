@@ -3,6 +3,8 @@
 
 #include <memory>
 
+namespace Elth::functionnal {
+
 template<typename T>
 class List
 {
@@ -11,24 +13,31 @@ public:
     List(const T& value) : _count(1), _head(std::make_shared<Node>(value, nullptr)) {}
     List(const List<T>& list) : _count(list._count), _head(list._head) {}
 
+    const T& head() const { return _head->value; }
+    const List<T> tail() const { return List(_head->next, _count - 1); }
+
     const List<T> pushFront(const T& value) const { return List(value, *this); }
     const List<T> pushBack(const T& value) const
     {
-        if (!_head)
-            return List(value);
-
-        if (!_head->next)
-            return List(_head->value, List(value));
-
+        if (!_head)  return List(value);
+        if (!_head->next) return List(_head->value, List(value));
         List<T> tail(_head->next, _count - 1);
         return List(_head->value, tail.pushBack(value));
     }
-    const T& at(const unsigned int index) const { return *(this[index]); }
+    const List<T> copy() const
+    {
+        if(!_head) return List();
+        if(!_head->next) return List(_head->value);
+        return List(_head->value, tail().copy());
+    }
+    const T& at(const unsigned int index) const { return this->operator[](index); }
 
     inline const unsigned int count() const { return _count; }
 
-    const List<T> operator[](const unsigned int index) const { return (index == 0) ? *this : List(_head->next, _count - 1)[index-1]; }
-    const T& operator*() const { return _head->value; }
+    const T& operator[](const unsigned int index) const { return *(this->operator()(index)); }
+    const T& operator*() const { return head(); }
+    const List<T> operator()() const { return *this; }
+    const List<T> operator()(const unsigned int index) const { return (index == 0) ? *this : tail().operator()(index-1); }
 
 protected:
     struct Node
@@ -43,5 +52,7 @@ protected:
     const unsigned int _count;
     const std::shared_ptr<Node> _head;
 };
+
+}
 
 #endif LIST_H

@@ -2,6 +2,8 @@
 #include <cassert>
 #include <cstdlib>
 
+using namespace Elth::functionnal;
+
 int main() {
     Option<int> some(42);
     Option<int> none;

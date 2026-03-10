@@ -2,6 +2,10 @@
 #include <cassert>
 #include <cstdlib>
 
+#include <iostream>
+
+using namespace Elth::functionnal;
+
 int main() 
 {
     List<int> l0(0);
