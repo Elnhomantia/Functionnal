@@ -12,6 +12,8 @@ public:
     List() : _count(0), _head(nullptr) {}
     List(const T& value) : _count(1), _head(std::make_shared<Node>(value, nullptr)) {}
     List(const List<T>& list) : _count(list._count), _head(list._head) {}
+    template<typename... Args>
+    List(const T& head, const Args&... tail) : List(head, List(tail...)) {}
 
     const T& head() const { return _head->value; }
     const List<T> tail() const { return List(_head->next, _count - 1); }
@@ -39,6 +41,14 @@ public:
     const List<T> operator()() const { return *this; }
     const List<T> operator()(const unsigned int index) const { return (index == 0) ? *this : tail().operator()(index-1); }
 
+    const List<T> operator+(const List<T> tail) const
+    {
+        if (!_head) return tail;
+        if (!_head->next) return List(_head->value, tail);
+        List<T> rest(_head->next, _count - 1);
+        return List(_head->value, rest + tail);
+    }
+
 protected:
     struct Node
     {
@@ -46,7 +56,7 @@ protected:
         const std::shared_ptr<Node> next;
     };
 
-    List(const T& value, List tail) : _count(tail._count +1), _head(std::make_shared<Node>(value, tail._head)) {}
+    List(const T& value, List<T> tail) : _count(tail._count +1), _head(std::make_shared<Node>(value, tail._head)) {}
     List(const std::shared_ptr<Node> head, const unsigned int count) : _head(head), _count(count) {}
 
     const unsigned int _count;

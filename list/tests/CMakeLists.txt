@@ -2,6 +2,7 @@ set(TEST_SOURCES
     list_trivial.cpp
     list_immutability.cpp
     list_shared.cpp
+    list_variadic.cpp
 )
 
 set(tests_executables)

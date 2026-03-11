@@ -1,6 +1,5 @@
 #include <list.h>
 #include <cassert>
-#include <cstdlib>
 
 using namespace Elth::functionnal;
 
